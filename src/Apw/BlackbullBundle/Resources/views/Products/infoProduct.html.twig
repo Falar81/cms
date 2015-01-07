@@ -1,0 +1,12 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}ApwBlackbullBundle:Products:infoProduct{% endblock %}
+
+{% block body %}
+    {% if errors is defined %}
+        {{ errors }}
+    {% else %}
+        <h1>Welcome to the {{ product.productsDescription.productsName|upper }} product page</h1>
+        {{ dump(product) }}
+    {% endif %}
+{% endblock %}

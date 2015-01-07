@@ -1,0 +1,103 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}ApwBlackbullBundle:Task:createTask{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Task:createTask page</h1>
+    {{ form_start(form) }}
+    {# rende l'unico campo: description #}
+    {{ form_row(form.description) }}
+
+    <h3>Tags</h3>
+    <ul class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
+        {# itera per ogni tag esistente e rende il suo unico campo: name #}
+        {% for tag in form.tags %}
+            <li>{{ form_row(tag.name) }}</li>
+        {% endfor %}
+    </ul>
+    {{ form_widget(form.tags.vars.prototype.name)|e }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+    // setup an "add a tag" link
+    var $addTagLink = $('<a href="#" class="add_tag_link">Add a tag</a>');
+    var $newLinkLi = $('<li></li>').append($addTagLink);
+
+    jQuery(document).ready(function() {
+        // Get the ul that holds the collection of tags
+        var $collectionHolder = $('ul.tags');
+
+        // aggiunge un collegamento di eliminazione a ogni elemento tag esistente
+        $collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addTagLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see code block below)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+
+
+    });
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+        console.log(prototype);
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove-tag">x</a>');
+
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove-tag').click(function(e) {
+            e.preventDefault();
+
+            $(this).parent().remove();
+
+            return false;
+        });
+
+        // aggiunge un collegamento di eliminazione al nuovo form
+        addTagFormDeleteLink($newFormLi);
+    }
+
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<a href="#">delete this tag</a>');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // previene il "#" nell'URL
+            e.preventDefault();
+
+            // rimuove l'elemento li per i form del tag
+            $tagFormLi.remove();
+        });
+    }
+</script>
+{% endblock %}

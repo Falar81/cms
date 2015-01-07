@@ -1,0 +1,4 @@
+apw_blackbull:
+    resource: "@ApwBlackbullBundle/Controller/"
+    type:     annotation
+    prefix:   /admin

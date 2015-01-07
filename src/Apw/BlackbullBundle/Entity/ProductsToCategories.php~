@@ -1,0 +1,92 @@
+<?php
+
+namespace Apw\BlackbullBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ProductsToCategories
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Apw\BlackbullBundle\Entity\ProductsToCategoriesRepository")
+ */
+class ProductsToCategories
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Products", inversedBy="categories")
+     * @ORM\JoinColumn(name="products_id", referencedColumnName="id")
+     **/
+    private $products;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Categories", inversedBy="products")
+     * @ORM\JoinColumn(name="categories_id", referencedColumnName="id")
+     **/
+    private $categories;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set products
+     *
+     * @param \Apw\BlackbullBundle\Entity\Products $products
+     * @return ProductsToCategories
+     */
+    public function setProducts(\Apw\BlackbullBundle\Entity\Products $products = null)
+    {
+        $this->products = $products;
+
+        return $this;
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Apw\BlackbullBundle\Entity\Products 
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * Set categories
+     *
+     * @param \Apw\BlackbullBundle\Entity\Categories $categories
+     * @return ProductsToCategories
+     */
+    public function setCategories(\Apw\BlackbullBundle\Entity\Categories $categories = null)
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Apw\BlackbullBundle\Entity\Categories 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+}
