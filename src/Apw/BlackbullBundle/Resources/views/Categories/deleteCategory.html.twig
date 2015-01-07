@@ -2,6 +2,8 @@
 
 
 {% block body %}
-elimino la categoria {{ id }}
+<h3>Elimino la categoria: {{ id }}</h3>
+    <hr>
+    <a class="btn btn-primary btn-lg" href="{{ app.request.headers.get('referer') }}"><i class="fa fa-arrow-circle-left"></i> Torna all'elenco</a>
 {% endblock %}
 
