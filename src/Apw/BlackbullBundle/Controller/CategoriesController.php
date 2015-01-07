@@ -55,10 +55,14 @@ class CategoriesController extends Controller
         );
     }
 
-    public function deleteCategoryAction($idCat){
+    /**
+     * @Route("/deleteCategory/{id}")
+     * @Template()
+     */
+    public function deleteCategoryAction($id){
 
         return array(
-            'id' => $idCat
+            'id' => $id
         );
     }
 
