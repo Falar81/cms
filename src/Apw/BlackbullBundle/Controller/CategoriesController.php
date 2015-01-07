@@ -55,4 +55,11 @@ class CategoriesController extends Controller
         );
     }
 
+    public function deleteCategoryAction($idCat){
+
+        return array(
+            'id' => $idCat
+        );
+    }
+
 }
