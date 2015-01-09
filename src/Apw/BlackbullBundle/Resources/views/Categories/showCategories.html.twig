@@ -26,10 +26,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                {#{{ dump(categories) }}#}
                     {% for category in categories %}
                         {% for categoryDesc in category.getCategoryDescription %}
                             <tr>
-                                <td> {{ categoryDesc.categoriesName }}</td>
+                                <td> {{ categoryDesc.categoriesName }}<span class="badge pull-right">{{ category.getProducts|length }}</span></td>
                                 <td>
                                     <div class="btn-group btn-group-xs">
                                         <a class="btn btn-primary"><i class="fa fa-gear fa-fw"></i> Azioni</a>
@@ -38,7 +39,7 @@
                                         <ul class="dropdown-menu">
                                             <li><a href="#"><i class="fa fa-cubes fa-fw"></i> Prodotti</a></li>
                                             <li><a href="#"><i class="fa fa-pencil fa-fw"></i> Modifica</a></li>
-                                            <li><a href="{{ path('apw_blackbull_categories_deletecategory',{'id': category.getId}) }}"><i class="fa fa-trash-o fa-fw"></i> Elimina</a></li>
+                                            <li><a href="{{ path('apw_blackbull_categories_deletecategory',{'id': category.getId}) }}" onclick="return confirm('Confermi l\'eliminazione?')"><i class="fa fa-trash-o fa-fw"></i> Elimina</a></li>
                                         </ul>
                                     </div>
                                 </td>

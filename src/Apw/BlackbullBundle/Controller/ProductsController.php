@@ -47,21 +47,21 @@ class ProductsController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $language = $em->getRepository('ApwBlackbullBundle:Languages')->findOneBy(array('code'=>'it'));
-
-        $category = new Categories();
-        $category->setCategoriesImage('keyboard.png');
-        $category->setDateAdded(new \DateTime());
-        $em->persist($category);
-
-        $categoryDesc = new CategoriesDescription();
-        $categoryDesc->setCategory($category);
-        $categoryDesc->setCategoriesName('Keyboard');
-        $categoryDesc->setLanguages($language);
-        $em->persist($categoryDesc);
+        $category = $em->getRepository('ApwBlackbullBundle:Categories')->findOneById('12');
+//        $category = new Categories();
+//        $category->setCategoriesImage('keyboard.png');
+//        $category->setDateAdded(new \DateTime());
+//        $em->persist($category);
+//
+//        $categoryDesc = new CategoriesDescription();
+//        $categoryDesc->setCategory($category);
+//        $categoryDesc->setCategoriesName('Keyboard');
+//        $categoryDesc->setLanguages($language);
+//        $em->persist($categoryDesc);
 
         $manufacturer= new Manufacturers();
-        $manufacturer->setManufacturersName('logitech');
-        $manufacturer->setManufacturersImage('logitech.png');
+        $manufacturer->setManufacturersName('Logitech');
+        $manufacturer->setManufacturersImage('Logitech.png');
         $manufacturer->setDateAdded(new \DateTime());
         $em->persist($manufacturer);
 
@@ -73,7 +73,7 @@ class ProductsController extends Controller
 
         $product = new Products();
         $product->setProductsModel('A32b34');
-        $product->setProductsPrice(59.90);
+        $product->setProductsPrice(100.00);
         $product->setProductsQuantity(10);
         //$product->setProductsWeight(200);
         //$product->setProductsDateAdded(new \DateTime()); // gestito in PrePersisst
@@ -81,7 +81,6 @@ class ProductsController extends Controller
         $product->setManufacturers($manufacturer);
         $product->addCategory($category);
         $em->persist($product);
-
 
         $productDesc = new ProductsDescription();
         $productDesc->setProduct($product);

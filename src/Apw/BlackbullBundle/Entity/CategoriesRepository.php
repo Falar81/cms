@@ -13,9 +13,10 @@ use Doctrine\ORM\EntityRepository;
 class CategoriesRepository extends EntityRepository
 {
     public function findCategoriesJoinedDescription(){
-        $query = $this->getEntityManager()
+        $query =
+            $this->getEntityManager()
             ->createQuery('
-                SELECT c, cd, p FROM ApwBlackbullBundle:Categories c
+                SELECT c, cd, p totProducts FROM ApwBlackbullBundle:Categories c
                 JOIN c.categoryDescription cd
                 LEFT JOIN c.products p
             ');
