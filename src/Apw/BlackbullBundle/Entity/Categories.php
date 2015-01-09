@@ -58,9 +58,14 @@ class Categories
     private $lastModified;
 
     /**
-     * @ORM\OneToMany(targetEntity="CategoriesDescription", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="CategoriesDescription", mappedBy="category", cascade={"persist", "remove"})
      */
     private $categoryDescription;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Products", mappedBy="categories")
+     **/
+    private $products;
 
     /**
      * Get id
@@ -193,6 +198,7 @@ class Categories
     public function __construct()
     {
         $this->categoryDescription = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -226,5 +232,38 @@ class Categories
     public function getCategoryDescription()
     {
         return $this->categoryDescription;
+    }
+
+    /**
+     * Add products
+     *
+     * @param \Apw\BlackbullBundle\Entity\Products $products
+     * @return Categories
+     */
+    public function addProduct(\Apw\BlackbullBundle\Entity\Products $products)
+    {
+        $this->products[] = $products;
+
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \Apw\BlackbullBundle\Entity\Products $products
+     */
+    public function removeProduct(\Apw\BlackbullBundle\Entity\Products $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }

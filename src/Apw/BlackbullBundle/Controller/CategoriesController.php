@@ -48,6 +48,7 @@ class CategoriesController extends Controller
             $em->persist($category);
             $em->persist($categoryDesc);
             $em->flush();
+            return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
         }
 
         return array(
@@ -61,9 +62,13 @@ class CategoriesController extends Controller
      */
     public function deleteCategoryAction($id){
 
-        return array(
-            'id' => $id
-        );
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('ApwBlackbullBundle:Categories')->find($id);
+
+        $em->remove($category);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
     }
 
 }

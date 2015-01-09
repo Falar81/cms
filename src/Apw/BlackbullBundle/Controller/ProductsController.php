@@ -49,31 +49,31 @@ class ProductsController extends Controller
         $language = $em->getRepository('ApwBlackbullBundle:Languages')->findOneBy(array('code'=>'it'));
 
         $category = new Categories();
-        $category->setCategoriesImage('sport.png');
+        $category->setCategoriesImage('keyboard.png');
         $category->setDateAdded(new \DateTime());
         $em->persist($category);
 
         $categoryDesc = new CategoriesDescription();
         $categoryDesc->setCategory($category);
-        $categoryDesc->setCategoriesName('SPORT');
+        $categoryDesc->setCategoriesName('Keyboard');
         $categoryDesc->setLanguages($language);
         $em->persist($categoryDesc);
 
         $manufacturer= new Manufacturers();
-        $manufacturer->setManufacturersName('NIKE');
-        $manufacturer->setManufacturersImage('nike.png');
+        $manufacturer->setManufacturersName('logitech');
+        $manufacturer->setManufacturersImage('logitech.png');
         $manufacturer->setDateAdded(new \DateTime());
         $em->persist($manufacturer);
 
         $manufacturerInfo = new ManufacturersInfo();
         $manufacturerInfo->setManufacturers($manufacturer);
-        $manufacturerInfo->setManufacturersUrl('www.nike.it');
+        $manufacturerInfo->setManufacturersUrl('www.logitech.it');
         $manufacturerInfo->setLanguages($language);
         $em->persist($manufacturerInfo);
 
         $product = new Products();
-        $product->setProductsModel('250881');
-        $product->setProductsPrice(190.90);
+        $product->setProductsModel('A32b34');
+        $product->setProductsPrice(59.90);
         $product->setProductsQuantity(10);
         //$product->setProductsWeight(200);
         //$product->setProductsDateAdded(new \DateTime()); // gestito in PrePersisst
@@ -85,8 +85,8 @@ class ProductsController extends Controller
 
         $productDesc = new ProductsDescription();
         $productDesc->setProduct($product);
-        $productDesc->setProductsName('Nike AIR');
-        $productDesc->setProductsDescription('Nike air sport 2014 limited edition');
+        $productDesc->setProductsName('Alto');
+        $productDesc->setProductsDescription('ergonomic and alto pc');
         $productDesc->setLanguages($language);
         $em->persist($productDesc);
 

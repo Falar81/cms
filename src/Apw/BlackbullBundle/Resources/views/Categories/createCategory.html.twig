@@ -3,26 +3,8 @@
 {% block title %}ApwBlackbullBundle:Categories:createCategory{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Categories:createCategory page</h1>
-
+<h1>Crea una nuova categoria</h1>
     {# rende l'unico campo: description #}
-    <div>
-        {{ form_label(form.categoryDescription) }}
-        {{ form_errors(form.categoryDescription) }}
-        {{ form_widget(form.categoryDescription) }}
-    </div>
-    <div>
-        {{ form_label(form.categoriesImage) }}
-        {{ form_errors(form.categoriesImage) }}
-        {{ form_widget(form.categoriesImage) }}
-    </div>
-    <div>
-        {{ form_label(form.sortOrder) }}
-        {{ form_errors(form.sortOrder) }}
-        {{ form_widget(form.sortOrder) }}
-    </div>
-    {{ form_row(form.save) }}
-
-
-
+    {{ form(form) }}
+    <a class="btn btn-primary btn-lg" href="{{ app.request.headers.get('referer') }}"><i class="fa fa-arrow-circle-left"></i> Torna all'elenco</a>
 {% endblock %}
