@@ -30,12 +30,12 @@ class CategoriesDescription
 
     /**
     * @ORM\ManyToOne(targetEntity="Categories", inversedBy="categoryDescription")
-    * @ORM\JoinColumn(name="categories_id", referencedColumnName="id")
     **/
     private $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="Languages", inversedBy="categoriesDescription")
+     * @ORM\JoinColumn(name="languages_id", referencedColumnName="id")
      **/
     private $languages;
 

@@ -50,8 +50,7 @@ class ProductsDescription
     private $products_viewed;
 
     /**
-     * @ORM\OneToOne(targetEntity="Products", inversedBy="productsDescription")
-     * @ORM\JoinColumn(name="products_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Products", inversedBy="productsDescription")
      **/
     private $product;
 

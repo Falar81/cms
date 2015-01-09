@@ -94,7 +94,7 @@ class Products
     private $productsOrdered;
 
     /**
-     * @ORM\OneToOne(targetEntity="ProductsDescription", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="ProductsDescription", mappedBy="product", cascade={"persist", "remove"})
      */
     private $productsDescription;
 
@@ -422,31 +422,6 @@ class Products
         return $this->productsImages;
     }
 
-
-    /**
-     * Set productsDescription
-     *
-     * @param \Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription
-     * @return Products
-     */
-    public function setProductsDescription(\Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription = null)
-    {
-        $this->productsDescription = $productsDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get productsDescription
-     *
-     * @return \Apw\BlackbullBundle\Entity\ProductsDescription 
-     */
-    public function getProductsDescription()
-    {
-        return $this->productsDescription;
-    }
-
-
     /**
      * Constructor
      */
@@ -454,6 +429,7 @@ class Products
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productsImages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productsDescription = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -487,5 +463,38 @@ class Products
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add productsDescription
+     *
+     * @param \Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription
+     * @return Products
+     */
+    public function addProductsDescription(\Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription)
+    {
+        $this->productsDescription[] = $productsDescription;
+
+        return $this;
+    }
+
+    /**
+     * Remove productsDescription
+     *
+     * @param \Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription
+     */
+    public function removeProductsDescription(\Apw\BlackbullBundle\Entity\ProductsDescription $productsDescription)
+    {
+        $this->productsDescription->removeElement($productsDescription);
+    }
+
+    /**
+     * Get productsDescription
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductsDescription()
+    {
+        return $this->productsDescription;
     }
 }
