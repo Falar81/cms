@@ -58,6 +58,13 @@ class Categories
     private $lastModified;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="categories_status", type="boolean", nullable = true, options={"default" = 1})
+     */
+    private $categoriesStatus;
+
+    /**
      * @ORM\OneToMany(targetEntity="CategoriesDescription", mappedBy="category", cascade={"persist", "remove"})
      */
     private $categoryDescription;
@@ -265,5 +272,28 @@ class Categories
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * Set categoriesStatus
+     *
+     * @param boolean $categoriesStatus
+     * @return Categories
+     */
+    public function setCategoriesStatus($categoriesStatus)
+    {
+        $this->categoriesStatus = $categoriesStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get categoriesStatus
+     *
+     * @return boolean 
+     */
+    public function getCategoriesStatus()
+    {
+        return $this->categoriesStatus;
     }
 }

@@ -16,13 +16,31 @@ class CategoriesController extends Controller
 {
 
     /**
+     * @Route("/showCategory/{id}")
+     * @Template()
+     */
+
+    public function showCategoryAction($id){
+
+        //query prodotti
+        $categoryProducts = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts($id);
+        //query sottoCategorie
+        $subCategories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findSubCategories($id);
+
+        return array(
+            'categoryProducts'=>$categoryProducts,
+            'subCategories' => $subCategories
+        );
+    }
+
+    /**
      * @Route("/showCategories")
      * @Template()
      */
 
     public function showCategoriesAction(){
 
-        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedDescription();
+        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts();
 
         return array(
             'categories' => $categories
@@ -69,6 +87,37 @@ class CategoriesController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
+    }
+
+    /**
+     * @Template()
+     */
+    public function getCategoryParentsAction($categoryId){
+
+        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoryParents($categoryId);
+
+//        foreach($categories as $category){
+//
+//                $category->getParentId()
+//        }
+        return array(
+            'categoryParents' => $categories,
+        );
+    }
+
+    /**
+     * @Route("/moveCategory/{id}")
+     * @Template()
+     */
+    public function moveCategoryAction($id){
+
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts($id);
+        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts();
+
+        return array(
+            'category' => $category,
+        );
     }
 
 }

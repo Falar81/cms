@@ -2,24 +2,15 @@
 
 {% block title %}Aggiunta Categoria Prodotti{% endblock %}
 
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <ol class="breadcrumb">
-                    <li><a href="{{ path('_welcome') }}">Home</a></li>
-                    <li><a href="{{ path('apw_blackbull_categories_showcategories') }}">Categorie Prodotti</a></li>
-                    <li><a>Aggiungi Categoria</a></li>
-                </ol>
-                <div class="page-header">
-                    <a class="btn btn-primary btn-lg" href="{{ app.request.headers.get('referer') }}"><i class="fa fa-arrow-circle-left"></i> Indietro</a>
-                </div>
-                {# rende l'unico campo: description #}
-                {{ form(form) }}
-            </div>
-            <div class="col-md-1"></div>
-        </div>
+{% block centralSide %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('_welcome') }}">Home</a></li>
+        <li><a href="{{ path('apw_blackbull_categories_showcategories') }}">Categorie Prodotti</a></li>
+        <li><a>Aggiungi Categoria</a></li>
+    </ol>
+    <div class="page-header">
+        <a class="btn btn-primary btn-lg" href="{{ app.request.headers.get('referer') }}"><i class="fa fa-arrow-circle-left"></i> Indietro</a>
     </div>
-
+    {# rende l'unico campo: description #}
+    {{ form(form) }}
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+
+{% set catName = "" %}
+
+{% for cat in category %}
+    {% for categoryDesc in cat.getCategoryDescription %}
+        {% set catName = categoryDesc.categoriesName %}
+    {% endfor %}
+{% endfor %}
+
+{% block title %}{% endblock %}
+
+{% block centralSide %}
+    <div class="alert alert-dismissable alert-warning">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4>Attenzione!</h4>
+        <p>Stai per spostare la categoria "{{ catName|upper }}"</p>
+    </div>
+{% endblock %}

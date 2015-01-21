@@ -3,12 +3,15 @@
     {{ parent() }}
     <link href="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
 {% endblock %}
-{% block title %}Elenco delle categorie prodotti{% endblock %}
+{% block title %}{% endblock %}
 
 {% block centralSide %}
     <ol class="breadcrumb">
         <li><a href="{{ path('_welcome') }}">Home</a></li>
-        <li><a>Categorie Prodotti</a></li>
+        <li><a href="{{ path('apw_blackbull_categories_showcategories') }}">Categorie Prodotti</a></li>
+        {% for category in categoryProducts %}
+            {{ render(controller('ApwBlackbullBundle:Categories:getCategoryParents',{ 'categoryId': category.getId })) }}
+        {% endfor %}
     </ol>
     <div class="page-header">
         <a href="{{ path('apw_blackbull_categories_createcategory') }}" class="btn btn-success btn-lg"><i class="fa fa-plus-circle fa-fw"></i> Aggiungi Categoria</a>
@@ -25,12 +28,11 @@
             </tr>
         </thead>
         <tbody>
-        {#{{ dump(categories) }}#}
-            {% for category in categories %}
+            {% for category in subCategories %}
                 {% for categoryDesc in category.getCategoryDescription %}
                     <tr>
                         <td class="col-md-10">
-                                <i class="fa fa-folder-o"></i><a href="{{ path('apw_blackbull_categories_showcategory',{'id' : category.getId}) }}"> {{ categoryDesc.categoriesName }}</a>
+                            <i class="fa fa-folder-o"></i><a href="{{ path('apw_blackbull_categories_showcategory',{'id' : category.getId}) }}"> {{ categoryDesc.categoriesName }}</a>
                             <span class="badge pull-right">
                                 {{ category.getProducts|length }}
                             </span>
@@ -44,7 +46,7 @@
                         </td>
                         <td class="col-md-2">
                             <div class="btn-group btn-group-xs">
-                                <a href="{{ path('apw_blackbull_categories_movecategory',{'id': category.getId}) }}" class="btn btn-primary"><i class="fa fa-arrows fa-fw"></i> Sposta</a>
+                                <a href="#" class="btn btn-primary"><i class="fa fa-arrows fa-fw"></i> Sposta</a>
                                 <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                                     <span class="fa fa-caret-down"></span></a>
                                 <ul class="dropdown-menu">
@@ -54,6 +56,28 @@
                             </div>
                         </td>
                     </tr>
+                {% endfor %}
+            {% endfor %}
+            {% for category in categoryProducts %}
+                {% for product in category.getProducts %}
+                    {% for productDescription in product.getProductsDescription %}
+                        <tr>
+                            <td>
+                                <i class="fa fa-cubes"></i> {{ productDescription.getProductsName }} ({{ product.getProductsModel }})
+                                <span class="badge pull-right">
+                                {{ product.getProductsQuantity }}
+                            </span>
+                            </td>
+                            <td>
+                                {% if product.getProductsStatus %}
+                                    <span class="label label-success">Online</span>
+                                {% else %}
+                                    <span class="label label-default">Offline</span>
+                                {% endif %}
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
             {% endfor %}
         </tbody>
