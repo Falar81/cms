@@ -1,10 +1,11 @@
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 {% extends "::base.html.twig" %}
 
 {% block title %}ApwBlackbullBundle:Task:createTask{% endblock %}
 
-{% block body %}
+{% block centralSide %}
 <h1>Welcome to the Task:createTask page</h1>
-    {{ form_start(form) }}
+    {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
     {# rende l'unico campo: description #}
     {{ form_row(form.description) }}
 
@@ -23,7 +24,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript">
     // setup an "add a tag" link
-    var $addTagLink = $('<a href="#" class="add_tag_link">Add a tag</a>');
+    var $addTagLink = $('<a href="#" class="add_tag_link btn btn-primary"><i class="fa fa-plus-square-o"></i> Aggiungi un tag</a>');
     var $newLinkLi = $('<li></li>').append($addTagLink);
 
     jQuery(document).ready(function() {
@@ -88,7 +89,7 @@
     }
 
     function addTagFormDeleteLink($tagFormLi) {
-        var $removeFormA = $('<a href="#">delete this tag</a>');
+        var $removeFormA = $('<a href="#" class="btn btn-danger"><i class="fa fa-trash-o"></i> Elimina questo tag</a>');
         $tagFormLi.append($removeFormA);
 
         $removeFormA.on('click', function(e) {

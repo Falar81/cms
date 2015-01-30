@@ -5,6 +5,7 @@ namespace Apw\BlackbullBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 class TagType extends AbstractType
 {
@@ -15,7 +16,9 @@ class TagType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name',null,array(
+                'constraints' => new Length(array('min'=>3)),
+            ))
         ;
     }
     

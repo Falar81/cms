@@ -36,11 +36,13 @@
                             </span>
                         </td>
                         <td>
-                            {% if category.getCategoriesStatus %}
-                                <span class="label label-success">Online</span>
-                            {% else %}
-                                <span class="label label-default">Offline</span>
-                            {% endif %}
+                            <form action="{{ path('apw_blackbull_categories_updcategorystatus', {'categoryId':category.getId}) }}" method="post">
+                                {% if category.getCategoriesStatus %}
+                                    <input id="categoryStatus" type="checkbox" value="{{ category.getCategoriesStatus }}" name="categoryStatus" onchange="submit()" checked data-toggle="toggle" data-onstyle="success" data-size="mini" data-on="<i class='fa fa-rocket'></i>Online" data-off="<i class='fa fa-rocket fa-rotate-180'></i>Offline">
+                                {% else %}
+                                    <input id="categoryStatus" type="checkbox" value="1" name="categoryStatus" onchange="submit()" data-toggle="toggle" data-onstyle="success" data-size="mini" data-on="<i class='fa fa-rocket'></i>Online" data-off="<i class='fa fa-rocket fa-rotate-180'></i>Offline">
+                                {% endif %}
+                            </form>
                         </td>
                         <td class="col-md-2">
                             <div class="btn-group btn-group-xs">

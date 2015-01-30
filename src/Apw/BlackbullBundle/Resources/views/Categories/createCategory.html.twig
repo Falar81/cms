@@ -12,5 +12,41 @@
         <a class="btn btn-primary btn-lg" href="{{ app.request.headers.get('referer') }}"><i class="fa fa-arrow-circle-left"></i> Indietro</a>
     </div>
     {# rende l'unico campo: description #}
-    {{ form(form) }}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        <fieldset>
+            <legend>Crea una nuova categoria:</legend>
+            {{ form_errors(form) }}
+            <div class="form-group">
+                {% for categoryDesc in form.categoryDescription %}
+                    {{ form_label(categoryDesc.categoriesName,label|default(null), { 'label_attr': {'class': 'col-lg-2 control-label'} }) }}
+                    <div class="col-lg-4">
+                        {{ form_errors(categoryDesc.categoriesName) }}
+                        {{ form_widget(categoryDesc.categoriesName, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                    {{ form_label(form.categoriesImage,label|default(null), { 'label_attr': {'class': 'col-lg-2 control-label'} }) }}
+                <div class="col-lg-4">
+                    {{ form_errors(form.categoriesImage) }}
+                    {{ form_widget(form.categoriesImage, {'attr': {'class': 'form-control'},'help': 'Massima risoluzione: 600x400 | formati consentiti: jpg, png, tiff'}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.categoriesStatus,label|default(null), { 'label_attr': {'class': 'col-lg-2 control-label'} }) }}
+                <div class="col-lg-4">
+                    {{ form_errors(form.categoriesStatus) }}
+                    {{ form_widget(form.categoriesStatus, {'attr': {'data-toggle': 'toggle','data-onstyle':'success','data-size':'normal','data-on':'<i class=\'fa fa-rocket\'></i> Online','data-off':'<i class=\'fa fa-rocket fa-rotate-180\'></i> Offline'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-4 col-lg-offset-2">
+                    {{ form_widget(form.azzera, {'attr': {'class': 'btn btn-default'}}) }}
+                    {{ form_widget(form.salva, {'attr': {'class': 'btn btn-primary'}}) }}
+                </div>
+            </div>
+        </fieldset>
+    {{ form_end(form) }}
 {% endblock %}

@@ -22,9 +22,10 @@ class CategoriesType extends AbstractType
                     'options' => array('data_class' => 'Apw\BlackbullBundle\Entity\CategoriesDescription'),
                     'by_reference' => false,
                 ))
-            ->add('categoriesImage')
-            ->add('sortOrder')
-            ->add('save','submit')
+            ->add('categoriesImage',null,array('label'=>'Foto:'))
+            ->add('categoriesStatus',null,array('label'=>'Stato:'))
+            ->add('salva','submit')
+            ->add('azzera','reset')
         ;
     }
     

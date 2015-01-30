@@ -8,9 +8,11 @@ use Apw\BlackbullBundle\Entity\Manufacturers;
 use Apw\BlackbullBundle\Entity\ManufacturersInfo;
 use Apw\BlackbullBundle\Entity\Products;
 use Apw\BlackbullBundle\Entity\ProductsDescription;
+use Apw\BlackbullBundle\Form\ProductsType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductsController extends Controller
 {
@@ -42,12 +44,22 @@ class ProductsController extends Controller
      * @Route("/createProduct")
      * @Template()
      */
-    public function createProductAction()
+    public function createProductAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
-        $language = $em->getRepository('ApwBlackbullBundle:Languages')->findOneBy(array('code'=>'it'));
-        $category = $em->getRepository('ApwBlackbullBundle:Categories')->findOneById('12');
+        $product=$em->getRepository('ApwBlackbullBundle:Products')->findProductInfo(3);
+
+        $productForm = $this->createForm(new ProductsType(), $product);
+        $productForm->handleRequest($request);
+        if($productForm->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+            return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
+        }
+//        $em = $this->getDoctrine()->getManager();
+//        $language = $em->getRepository('ApwBlackbullBundle:Languages')->findOneBy(array('code'=>'it'));
+//        $category = $em->getRepository('ApwBlackbullBundle:Categories')->findOneById('12');
 //        $category = new Categories();
 //        $category->setCategoriesImage('keyboard.png');
 //        $category->setDateAdded(new \DateTime());
@@ -58,41 +70,41 @@ class ProductsController extends Controller
 //        $categoryDesc->setCategoriesName('Keyboard');
 //        $categoryDesc->setLanguages($language);
 //        $em->persist($categoryDesc);
-
-        $manufacturer= new Manufacturers();
-        $manufacturer->setManufacturersName('Logitech');
-        $manufacturer->setManufacturersImage('Logitech.png');
-        $manufacturer->setDateAdded(new \DateTime());
-        $em->persist($manufacturer);
-
-        $manufacturerInfo = new ManufacturersInfo();
-        $manufacturerInfo->setManufacturers($manufacturer);
-        $manufacturerInfo->setManufacturersUrl('www.logitech.it');
-        $manufacturerInfo->setLanguages($language);
-        $em->persist($manufacturerInfo);
-
-        $product = new Products();
-        $product->setProductsModel('A32b34');
-        $product->setProductsPrice(100.00);
-        $product->setProductsQuantity(10);
-        //$product->setProductsWeight(200);
-        //$product->setProductsDateAdded(new \DateTime()); // gestito in PrePersisst
-        $product->setProductsDateAvailable(new \DateTime('tomorrow'));
-        $product->setManufacturers($manufacturer);
-        $product->addCategory($category);
-        $em->persist($product);
-
-        $productDesc = new ProductsDescription();
-        $productDesc->setProduct($product);
-        $productDesc->setProductsName('Alto');
-        $productDesc->setProductsDescription('ergonomic and alto pc');
-        $productDesc->setLanguages($language);
-        $em->persist($productDesc);
-
-        $em->flush();
+//
+//        $manufacturer= new Manufacturers();
+//        $manufacturer->setManufacturersName('Logitech');
+//        $manufacturer->setManufacturersImage('Logitech.png');
+//        $manufacturer->setDateAdded(new \DateTime());
+//        $em->persist($manufacturer);
+//
+//        $manufacturerInfo = new ManufacturersInfo();
+//        $manufacturerInfo->setManufacturers($manufacturer);
+//        $manufacturerInfo->setManufacturersUrl('www.logitech.it');
+//        $manufacturerInfo->setLanguages($language);
+//        $em->persist($manufacturerInfo);
+//
+//        $product = new Products();
+//        $product->setProductsModel('A32b34');
+//        $product->setProductsPrice(100.00);
+//        $product->setProductsQuantity(10);
+//        //$product->setProductsWeight(200);
+//        //$product->setProductsDateAdded(new \DateTime()); // gestito in PrePersisst
+//        $product->setProductsDateAvailable(new \DateTime('tomorrow'));
+//        $product->setManufacturers($manufacturer);
+//        $product->addCategory($category);
+//        $em->persist($product);
+//
+//        $productDesc = new ProductsDescription();
+//        $productDesc->setProduct($product);
+//        $productDesc->setProductsName('Alto');
+//        $productDesc->setProductsDescription('ergonomic and alto pc');
+//        $productDesc->setLanguages($language);
+//        $em->persist($productDesc);
+//
+//        $em->flush();
 
         return array(
-            //
+            'form' => $productForm->createView()
         );
             //$this->redirect($this->generateUrl('apw_blackbull_products_showproducts'));
     }

@@ -2,3 +2,13 @@ apw_blackbull:
     resource: "@ApwBlackbullBundle/Controller/"
     type:     annotation
     prefix:   /admin
+
+login:
+    path:     /login
+    defaults: { _controller: ApwBlackbullBundle:Security:login }
+
+login_check:
+    path: /login_check
+
+logout:
+    path:   /logout

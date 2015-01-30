@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class CategoriesController extends Controller
@@ -28,8 +30,8 @@ class CategoriesController extends Controller
         $subCategories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findSubCategories($id);
 
         return array(
-            'categoryProducts'=>$categoryProducts,
-            'subCategories' => $subCategories
+            'categoryProducts' => $categoryProducts,
+            'subCategories'    => $subCategories
         );
     }
 
@@ -42,12 +44,14 @@ class CategoriesController extends Controller
 
         $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts();
 
+
         return array(
             'categories' => $categories
         );
     }
 
     /**
+     * @Security("has_role('ROLE_ADMIN')")
      * @Route("/createCategory")
      * @Template()
      */
@@ -109,15 +113,27 @@ class CategoriesController extends Controller
      * @Route("/moveCategory/{id}")
      * @Template()
      */
-    public function moveCategoryAction($id){
+    public function moveCategoryAction($id, Request $request){
 
         $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts($id);
-        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts();
 
         return array(
             'category' => $category,
         );
     }
 
-}
+    /**
+     * @Route("/updCategoryStatus/{categoryId}")
+     */
+    public function updCategoryStatusAction($categoryId){
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('ApwBlackbullBundle:Categories')->find($categoryId);
+        $category->setCategoriesStatus($this->get('request')->request->get('categoryStatus'));
+        $em->persist($category);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
+    }
+
+    }

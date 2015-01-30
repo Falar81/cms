@@ -5,8 +5,9 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="http://bootswatch.com/readable/bootstrap.min.css">
+            <link rel="stylesheet" href="http://bootswatch.com/readable/bootstrap.css">
             {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">#}
+            <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
             <style type="text/css">
                 body { padding-top: 70px; }
             </style>
@@ -47,13 +48,18 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Link</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">BENVENUTO, Gest <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">BENVENUTO,
+                                {% if is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
+                                    {{ app.user.username }}
+                                {% else %}
+                                    Guest
+                                {% endif %} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">Action</a></li>
                                 <li><a href="#">Another action</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                <li><a href="{{ path('logout') }}"><i class="fa fa-power-off"></i> LogOff</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -71,6 +77,7 @@
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+            <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
         {% endblock %}
     </body>
 </html>

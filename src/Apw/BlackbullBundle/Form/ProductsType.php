@@ -4,6 +4,8 @@ namespace Apw\BlackbullBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ProductsType extends AbstractType
@@ -16,15 +18,19 @@ class ProductsType extends AbstractType
     {
         $builder
             ->add('productsQuantity')
-            ->add('productsModel')
+            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
+                $product = $event->getData();
+                $form = $event->getForm();
+                if(!$product || null === $product->getId()){
+                    $form->add('productsModel');
+                }
+            })
             ->add('productsImage')
             ->add('productsPrice')
-            ->add('productsDateAdded')
-            ->add('productsLastModified')
             ->add('productsDateAvailable')
             ->add('productsWeight')
             ->add('productsStatus')
-            ->add('productsOrdered')
+            ->add('salva','submit')
         ;
     }
     

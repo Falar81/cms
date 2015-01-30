@@ -15,12 +15,24 @@ security:
         in_memory:
             memory:
                 users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    fabio:  { password: fabiopass, roles: [ 'ROLE_USER' ] }
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
     firewalls:
+        secured_area:
+          remember_me:
+                        key:      "%secret%"
+                        lifetime: 31536000 # 365 giorni in secondi
+                        path:     /
+                        domain:   ~ # Defaults to the current domain from $_SERVER
+          pattern: ^/
+          anonymous: ~
+          form_login: ~
+          logout:
+              path:   /logout
+              target: /login
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -49,4 +61,4 @@ security:
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_USER]}
