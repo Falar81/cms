@@ -1,0 +1,43 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}ApwBlackbullBundle:Security:login{% endblock %}
+
+{% block centralSide %}
+    {% if error %}
+        <div class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Attenzione!</strong> {{ error.message|trans }}
+        </div>
+    {% endif %}
+
+    <form action="{{ path('login_check') }}" method="post" class="form-horizontal">
+        <fieldset>
+
+            <legend>Accedi</legend>
+
+            <div class="form-group">
+                <label for="username" class="col-lg-2 control-label">Username/Email:</label>
+                <div class="col-lg-10">
+                    <input class="form-control" type="text" placeholder="Your username or email" id="username" name="_username" value="{{ last_username }}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="col-lg-2 control-label">Password:</label>
+                <div class="col-lg-6">
+                    <input class="form-control" placeholder="Your password.." type="password" id="password" name="_password" />
+                </div>
+                <div class="col-lg-4">
+                    <label for="password" class="col-lg-8 control-label">Ricordami:</label>
+                    <input class="form-control col-lg-4" type="checkbox" id="remember_me" name="_remember_me" data-toggle="toggle" data-onstyle="success" data-on="Si" data-off="No" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
