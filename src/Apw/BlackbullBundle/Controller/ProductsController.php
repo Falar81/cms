@@ -129,4 +129,17 @@ class ProductsController extends Controller
                 // ...
             );    }
 
+    /**
+     * @Route("/updProductStatus/{productId}")
+     */
+    public function updProductStatusAction($productId){
+        $em = $this->getDoctrine()->getManager();
+        $product = $em->getRepository('ApwBlackbullBundle:Products')->find($productId);
+        $product->setProductsStatus($this->get('request')->request->get('productStatus'));
+        $em->persist($product);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
+
+    }
 }

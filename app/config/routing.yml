@@ -3,12 +3,8 @@ apw_blackbull:
     type:     annotation
     prefix:   /admin
 
-login:
-    path:     /login
-    defaults: { _controller: ApwBlackbullBundle:Security:login }
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
-login_check:
-    path: /login_check
-
-logout:
-    path:   /logout
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -48,19 +48,18 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Link</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">BENVENUTO,
-                                {% if is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
-                                    {{ app.user.username }}
-                                {% else %}
-                                    Guest
-                                {% endif %} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{{ path('logout') }}"><i class="fa fa-power-off"></i> LogOff</a></li>
-                            </ul>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+                                     <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-power-off"></i> {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+                                </ul>
+                            {% endif %}
                         </li>
                     </ul>
                 </div>
@@ -78,6 +77,8 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
             <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% endblock %}
     </body>
 </html>

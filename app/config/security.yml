@@ -3,20 +3,18 @@
 security:
     # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
     encoders:
-        Apw\BlackbullBundle\Entity\User:
-                    algorithm: bcrypt
-                    cost: 12
+        FOS\UserBundle\Model\UserInterface: sha512
        # Symfony\Component\Security\Core\User\User: plaintext
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-          administrators:
-                      entity: { class: ApwBlackbullBundle:User }
+          fos_userbundle:
+                      id: fos_user.user_provider.username
 #        in_memory:
 #            memory:
 #                users:
@@ -26,44 +24,49 @@ security:
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
     firewalls:
-        secured_area:
-          remember_me:
-                        key:      "%secret%"
-                        lifetime: 31536000 # 365 giorni in secondi
-                        path:     /
-                        domain:   ~ # Defaults to the current domain from $_SERVER
-          pattern: ^/
-          anonymous: ~
-          form_login: ~
-          logout:
-              path:   /logout
-              target: /login
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        # the login page has to be accessible for everybody
-        demo_login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        # secures part of the application
-        demo_secured_area:
-            pattern:    ^/demo/secured/
-            # it's important to notice that in this case _demo_security_check and _demo_login
-            # are route names and that they are specified in the AcmeDemoBundle
+         # disables authentication for assets and the profiler, adapt it according to your needs
+         dev:
+             pattern:  ^/(_(profiler|wdt)|css|images|js)/
+             security: false
+         # the login page has to be accessible for everybody
+         demo_login:
+                     pattern:  ^/demo/secured/login$
+                     security: false
+         # secures part of the application
+         demo_secured_area:
+             pattern:    ^/demo/secured/
+             # it's important to notice that in this case _demo_security_check and _demo_login
+             # are route names and that they are specified in the AcmeDemoBundle
+             form_login:
+                 check_path: _demo_security_check
+                 login_path: _demo_login
+             logout:
+                 path:   _demo_logout
+                 target: _demo
+             #anonymous: ~
+             #http_basic:
+             #    realm: "Secured Demo Area"
+         main:
+            pattern: ^/
             form_login:
-                check_path: _demo_security_check
-                login_path: _demo_login
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                default_target_path: apw_blackbull_categories_showcategories
+            remember_me:
+                key:      "%secret%"
+                lifetime: 2678400 # 1 mese in secondi
+                path:     /
+                domain:   ~ # Defaults to the current domain from $_SERVER
             logout:
-                path:   _demo_logout
-                target: _demo
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+              path:   fos_user_security_logout
+              target: fos_user_security_login
+            anonymous:    true
 
     # with these settings you can restrict or allow access for different parts
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
-        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_USER]}
+            - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/admin/, role: ROLE_ADMIN }

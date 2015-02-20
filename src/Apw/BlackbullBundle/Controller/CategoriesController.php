@@ -9,6 +9,7 @@ use Apw\BlackbullBundle\Form\CategoriesType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -18,35 +19,28 @@ class CategoriesController extends Controller
 {
 
     /**
-     * @Route("/showCategory/{id}")
+     * @Route("/showCategories/{id}", defaults={"id" = 0})
      * @Template()
      */
 
-    public function showCategoryAction($id){
+    public function showCategoriesAction($id = null){
 
-        //query prodotti
-        $categoryProducts = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts($id);
-        //query sottoCategorie
-        $subCategories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findSubCategories($id);
+        if($id){
 
-        return array(
-            'categoryProducts' => $categoryProducts,
-            'subCategories'    => $subCategories
-        );
-    }
+            $em = $this->getDoctrine()->getManager();
+            $category = $em->getRepository('ApwBlackbullBundle:Categories')->find($id);
+            $childCategories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findChildCategoriesJoinedProducts($id);
 
-    /**
-     * @Route("/showCategories")
-     * @Template()
-     */
+            return array(
+                'childCategories' => $childCategories,
+                'category' => $category,
+            );
+        }
 
-    public function showCategoriesAction(){
-
-        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts();
-
+        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findChildCategoriesJoinedProducts();
 
         return array(
-            'categories' => $categories
+            'childCategories' => $categories,
         );
     }
 
@@ -65,6 +59,7 @@ class CategoriesController extends Controller
 
         $form = $this->createForm(new CategoriesType(), $category);
         $form->handleRequest($request);
+
         if($form->isValid()){
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
@@ -94,33 +89,22 @@ class CategoriesController extends Controller
     }
 
     /**
-     * @Template()
+     * @Route("/listCategoryToMove/{id}", options={"expose"=true})
      */
-    public function getCategoryParentsAction($categoryId){
-
-        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findCategoryParents($categoryId);
-
-//        foreach($categories as $category){
-//
-//                $category->getParentId()
-//        }
-        return array(
-            'categoryParents' => $categories,
-        );
-    }
-
-    /**
-     * @Route("/moveCategory/{id}")
-     * @Template()
-     */
-    public function moveCategoryAction($id, Request $request){
+    public function listCategoryToMoveAction($id){
 
         $em = $this->getDoctrine()->getManager();
-        $category = $em->getRepository('ApwBlackbullBundle:Categories')->findCategoriesJoinedProducts($id);
+        $categoriesList = $em->getRepository('ApwBlackbullBundle:Categories')->findAll();
 
-        return array(
-            'category' => $category,
-        );
+        foreach($categoriesList as $category){
+            foreach($category->getCategoryDescription() as $categoryName){
+                $categoriesName[]=$categoryName->getCategoriesName();
+            }
+        }
+
+        $response = new JsonResponse();
+        return $response->setData(array('categoriesName'=>$categoriesName));
+
     }
 
     /**
@@ -136,4 +120,4 @@ class CategoriesController extends Controller
         return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
     }
 
-    }
+}
