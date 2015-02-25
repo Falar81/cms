@@ -23,7 +23,7 @@ class CategoriesController extends Controller
      * @Template()
      */
 
-    public function showCategoriesAction($id = null){
+    public function showCategoriesAction($id){
 
         if($id){
 
@@ -37,7 +37,7 @@ class CategoriesController extends Controller
             );
         }
 
-        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findChildCategoriesJoinedProducts();
+        $categories = $this->getDoctrine()->getRepository('ApwBlackbullBundle:Categories')->findChildCategoriesJoinedProducts($id);
 
         return array(
             'childCategories' => $categories,
@@ -61,10 +61,15 @@ class CategoriesController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()){
+            //exit(\Doctrine\Common\Util\Debug::dump($category));
             $em = $this->getDoctrine()->getManager();
+            if(!$category->getParentId()){
+                $category->setParentId(0);
+            }
             $em->persist($category);
             $em->persist($categoryDesc);
             $em->flush();
+
             return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
         }
 
@@ -94,17 +99,21 @@ class CategoriesController extends Controller
     public function listCategoryToMoveAction($id){
 
         $em = $this->getDoctrine()->getManager();
-        $categoriesList = $em->getRepository('ApwBlackbullBundle:Categories')->findAll();
+        $categoryNameToMove = $em->getRepository('ApwBlackbullBundle:Categories')->findOneBy(array('id'=>$id));
+        $categoriesList = $em->getRepository('ApwBlackbullBundle:Categories')->listCategoriesToMove($id);
 
         foreach($categoriesList as $category){
             foreach($category->getCategoryDescription() as $categoryName){
-                $categoriesName[]=$categoryName->getCategoriesName();
+                $categoriesName[$category->getId()][] = $categoryName->getCategoriesName();
             }
         }
 
-        $response = new JsonResponse();
-        return $response->setData(array('categoriesName'=>$categoriesName));
+        foreach($categoryNameToMove->getCategoryDescription() as $categoryToMove){
+            $categoryDescName[] = $categoryToMove->getCategoriesName();
+        }
 
+        $response = new JsonResponse();
+        return $response->setData(array('categoriesName' => $categoriesName, 'categoryNameToMove' => $categoryDescName));
     }
 
     /**
@@ -114,6 +123,20 @@ class CategoriesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository('ApwBlackbullBundle:Categories')->find($categoryId);
         $category->setCategoriesStatus($this->get('request')->request->get('categoryStatus'));
+        $em->persist($category);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('apw_blackbull_categories_showcategories'));
+    }
+
+    /**
+     * @Route("/moveCategory/{fromId}/{toId}", options={"expose"=true})
+     */
+    public function moveCategoryAction($fromId, $toId){
+
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('ApwBlackbullBundle:Categories')->find($fromId);
+        $category->setParentId($toId);
         $em->persist($category);
         $em->flush();
 

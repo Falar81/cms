@@ -12,12 +12,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Scegli la categoria</h4>
+                    <h4 class="modal-title" >Sposta <span class="label label-info" id="exampleModalLabel"></span> in:</h4>
                 </div>
                 <div class="modal-body">
-                    {# chiamare un controller per listare tutte le categorie #}
-                    <div class="list-group categoriesList">
-
+                    <div class="list-group categoriesList text-center">
+                        {# ApwBlackbullBundle:Categories:listCategoryToMoveAction gestita con chiamata AJAX vedere 'main.js' #}
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace Apw\BlackbullBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -22,8 +23,14 @@ class CategoriesType extends AbstractType
                     'options' => array('data_class' => 'Apw\BlackbullBundle\Entity\CategoriesDescription'),
                     'by_reference' => false,
                 ))
-            ->add('categoriesImage',null,array('label'=>'Foto:'))
-            ->add('categoriesStatus',null,array('label'=>'Stato:'))
+            ->add('categoriesImage', null, array('label'=>'Foto:'))
+            ->add('categoriesStatus', null, array('label'=>'Stato:'))
+            ->add('parentId', 'entity', array(
+                                            'class'       => 'ApwBlackbullBundle:CategoriesDescription',
+                                            'property'    => 'categoriesName',
+                                            'empty_value' => 'Scegliere una categoria',
+                                            'required'    => false,
+                                            'label'       => 'Crea in:'))
             ->add('salva','submit')
             ->add('azzera','reset')
         ;

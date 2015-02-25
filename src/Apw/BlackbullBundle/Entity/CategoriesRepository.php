@@ -12,17 +12,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoriesRepository extends EntityRepository
 {
-    public function findChildCategoriesJoinedProducts($id = 0){
+    public function findChildCategoriesJoinedProducts($id){
 
         $query =
             $this->getEntityManager()
                 ->createQuery('
             SELECT c, cd, p, pd FROM ApwBlackbullBundle:Categories c
-            JOIN c.categoryDescription cd
+            LEFT JOIN c.categoryDescription cd
             LEFT JOIN c.products p
             LEFT JOIN p.productsDescription pd
             WHERE c.parentId = :id'
                 )->setParameter('id', $id);
+        try{
+            return $query->getResult();
+        }catch(\Doctrine\ORM\NoResultException $e){
+            return null;
+        }
+    }
+
+    public function listCategoriesToMove($id) {
+        $query =
+            $this->getEntityManager()
+                ->createQuery('
+            SELECT c, cd FROM ApwBlackbullBundle:Categories c
+            LEFT JOIN c.categoryDescription cd
+            WHERE c.id <> :id')->setParameter('id', $id);
         try{
             return $query->getResult();
         }catch(\Doctrine\ORM\NoResultException $e){

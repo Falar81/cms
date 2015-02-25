@@ -77,7 +77,7 @@ class Categories
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -100,7 +100,7 @@ class Categories
     /**
      * Get categoriesImage
      *
-     * @return string 
+     * @return string
      */
     public function getCategoriesImage()
     {
@@ -123,7 +123,7 @@ class Categories
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -146,7 +146,7 @@ class Categories
     /**
      * Get sortOrder
      *
-     * @return string 
+     * @return string
      */
     public function getSortOrder()
     {
@@ -169,7 +169,7 @@ class Categories
     /**
      * Get dateAdded
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateAdded()
     {
@@ -192,7 +192,7 @@ class Categories
     /**
      * Get lastModified
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastModified()
     {
@@ -234,7 +234,7 @@ class Categories
     /**
      * Get categoryDescription
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategoryDescription()
     {
@@ -267,7 +267,7 @@ class Categories
     /**
      * Get products
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getProducts()
     {
@@ -290,7 +290,7 @@ class Categories
     /**
      * Get categoriesStatus
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCategoriesStatus()
     {
