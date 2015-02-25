@@ -61,10 +61,17 @@ class CategoriesController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()){
-            //exit(\Doctrine\Common\Util\Debug::dump($category));
+
+            //exit(\Doctrine\Common\Util\Debug::dump($parentCategory->getId()));
             $em = $this->getDoctrine()->getManager();
             if(!$category->getParentId()){
                 $category->setParentId(0);
+            }else{
+                // prendo il valore del campo di scelta della categoria così:
+                $parent = $category->getParentId();
+                $parentCategory = $parent->getCategory();
+                // fine
+                $category->setParentId($parentCategory->getId());
             }
             $em->persist($category);
             $em->persist($categoryDesc);

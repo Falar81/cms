@@ -39,6 +39,10 @@ class CategoriesDescription
      **/
     private $languages;
 
+    public function __toString() {
+        return $this->categoriesName;
+    }
+
     /**
      * Get id
      *
